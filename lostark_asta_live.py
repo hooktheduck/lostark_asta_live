@@ -15,8 +15,12 @@ bot = commands.Bot(command_prefix='!')
 
 
 def getAstaStatus():
-    response = requests.get("https://lost-ark-api.vercel.app/server/all").json()['data']['Asta'].split(" ")[1]
 
+    try:
+        response = requests.get("https://lastarkapi-m2.herokuapp.com/server/all").json()['data']['Asta'].split(" ")[1]
+    except Exception:
+        response = requests.get("https://lost-ark-api.vercel.app/server/all").json()['data']['Asta'].split(" ")[1]
+        
     if response == "Maintenance" or response == "Offline":
         return "Offline"
 
@@ -41,12 +45,14 @@ async def update():
 
 @bot.event
 async def on_ready():
+    dotenv_file = dotenv.find_dotenv()
     dotenv.set_key(dotenv_file, "astaStatus", getAstaStatus())
     await updateTimer.start()
 
 
+
 @tasks.loop(seconds=int(60))
-async def updateTimer(status):
+async def updateTimer():
     await update()
 
 
