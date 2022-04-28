@@ -31,13 +31,13 @@ def getAstaStatus():
 async def update():
     if os.getenv("astaStatus") != getAstaStatus():
         if os.getenv("astaStatus") == 'Offline' and getAstaStatus() == "Online":
-            channel = bot.get_channel(channelId)
+            channel = bot.get_channel(int(channelId))
             await channel.send("Der Server **Asta** ist wieder online!")
             print("Server wieder online!")
             dotenv.set_key(dotenv_file, "astaStatus", getAstaStatus())
 
         if os.getenv("astaStatus") == "Online" and getAstaStatus() == 'Offline':
-            channel = bot.get_channel(channelId)
+            channel = bot.get_channel(int(channelId))
             await channel.send("Der Server **Asta** ist jetzt offline!")
             print("Server ist offline!")
             dotenv.set_key(dotenv_file, "astaStatus", getAstaStatus())
@@ -46,7 +46,7 @@ async def update():
 @bot.event
 async def on_ready():
     dotenv_file = dotenv.find_dotenv()
-    dotenv.set_key(dotenv_file, "astaStatus", getAstaStatus())
+    dotenv.set_key(dotenv_file, "astaStatus", "Online")
     await updateTimer.start()
 
 
