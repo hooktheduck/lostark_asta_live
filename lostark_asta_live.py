@@ -2,7 +2,6 @@ import dotenv
 import requests
 import os
 import discord
-import pickle
 
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
