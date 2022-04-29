@@ -2,6 +2,8 @@ import dotenv
 import requests
 import os
 import discord
+import pickle 
+import lostark_server_api as api
 
 from dotenv import load_dotenv
 from discord.ext import commands, tasks
@@ -12,6 +14,7 @@ discordBotToken = os.getenv("DISCORD_BOT_TOKEN")
 discordName = os.getenv("DISCORD_NAME")
 channelId = os.getenv("CHANNEL_ID")
 bot = commands.Bot(command_prefix='!')
+
 
 def load():
     with open('data.txt') as f:
@@ -29,11 +32,8 @@ def getAstaStatus():
     # Namen für Online-Status
     onlineList = ["Full", "Busy", "Online", "Good", "Ok"]
 
-    try:
-        response = requests.get("https://lastarkapi-m2.herokuapp.com/server/all").json()['data']['Asta'].split(" ")[1]
-    except Exception:
-        response = requests.get("https://lost-ark-api.vercel.app/server/all").json()['data']['Asta'].split(" ")[1]
-        
+    response = api.getStatusOf("Asta")
+    
     if response in offlineList:
         return "Offline"
 
@@ -58,7 +58,11 @@ async def update():
 
 @bot.event
 async def on_ready():
-    write(getAstaStatus())
+    try:
+        write(getAstaStatus())
+    except Exception as e:
+        print(e)
+        
     await updateTimer.start()
 
 
