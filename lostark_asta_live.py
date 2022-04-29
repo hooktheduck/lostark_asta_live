@@ -32,7 +32,13 @@ def getAstaStatus():
     # Namen für Online-Status
     onlineList = ["Full", "Busy", "Online", "Good", "Ok"]
 
-    response = api.getStatusOf("Asta")
+    try:
+        response = api.getStatusOf("Asta")
+    except:
+        try:
+            response = requests.get("https://lastarkapi-m2.herokuapp.com/server/all").json()['data']['Asta'].split(" ")[1]
+        except:
+            response = requests.get("https://lost-ark-api.vercel.app/server/all").json()['data']['Asta'].split(" ")[1]
     
     if response in offlineList:
         return "Offline"
