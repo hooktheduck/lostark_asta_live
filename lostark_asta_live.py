@@ -26,6 +26,14 @@ def write(text):
 
 def getAstaStatus():
 
+    try:
+        check = requests.get("https://lastarkapi-m2.herokuapp.com/server/all").json()['data']
+    except:
+        check = requests.get("https://lost-ark-api.vercel.app/server/all").json()['data'] 
+
+    if not check:
+        return "Offline" 
+
     # Namen für Offline-Status
     offlineList = ["Maintenance", "Offline"]
 
